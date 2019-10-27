@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!-- Log message bean here
+    <bean id="myLoggerConfig" class="com.js.springdemo.MyLoggerConfig" init-method="initLogger">
+        <property name="rootLoggerLevel" value="FINE" />
+        <property name="printedLoggerLevel" value="FINE"/>
+    </bean> -->
+	
+	<!--  loads the properties file : sport.properties (new) -->
+	<context:property-placeholder location="classpath:sport.properties"/>
+	
+    <!-- define the dependency -->
+    <bean id="myFortuneService" class="com.js.springdemo.HappyHappy"></bean>
+
+    
+     <!-- Define your beans here -->
+     
+    <bean id="myCoach" class="com.js.springdemo.DrumCoach">
+        <!--  set up (i)constructor injection -->
+        <constructor-arg ref="myFortuneService"/> 
+    </bean>
+    
+    <bean id="myCoach2" class="com.js.springdemo.TrackCoach"></bean>
+
+    <bean id="myCoach3" 
+    		class="com.js.springdemo.MusicCoach">
+    	<!--  set up (ii)setter injection -->
+ 		<!--  NB : ref value must be equals to our id of your dependency bean's ID -->
+ 		<!--  NB : name="fortuneService" will call setFortuneService(...) -->
+ 		<property name="fortuneService" ref="myFortuneService"></property>
+ 		
+ 		<!--  inject literal values (new) -->
+ 		<!--  NB : property name "emailAdress" will call  setEmailAdress(...) -->
+ 		<property name="emailAdress" value="${foo.email}"></property>
+ 		<property name="team" value="${foo.team}"></property>
+ 	</bean>
+</beans>
